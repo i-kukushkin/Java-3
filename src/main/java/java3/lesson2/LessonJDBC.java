@@ -102,10 +102,16 @@ public class LessonJDBC {
 
                     String[] query = userInput.split(" ");
 
+                    String checkForProductAvailability = String.format("SELECT * FROM products WHERE title = '%s'", query[1]);
                     sqlQuery = String.format("UPDATE products SET cost = '%s' WHERE title = '%s'", query[2], query[1]);
+                    ResultSet resultSet = statement.executeQuery(checkForProductAvailability);
 
-                    int result = statement.executeUpdate(sqlQuery);
-                    System.out.println("Цена товара " + query[1] + " изменена на " + query[2]);
+                    if (resultSet.next()) {
+                        statement.executeUpdate(sqlQuery);
+                        System.out.println("Цена товара " + query[1] + " изменена на " + query[2]);
+                    } else {
+                        System.out.println("Такого товара нет");
+                    }
                 }
                 if (userInput.startsWith("товарыпоцене")) {
 
